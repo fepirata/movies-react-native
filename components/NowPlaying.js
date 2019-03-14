@@ -1,11 +1,5 @@
 import React from "react";
 import { Text, View, Image, StyleSheet } from "react-native";
-import {
-  createSwitchNavigator,
-  createAppContainer,
-  createBottomTabNavigator,
-  createStackNavigator
-} from "react-navigation";
 import Header from "./Header";
 
 class NowPlaying extends React.Component {

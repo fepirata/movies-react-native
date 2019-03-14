@@ -1,11 +1,5 @@
 import React from "react";
-import { Text, View, Button, Image, FlatList, StyleSheet } from "react-native";
-import {
-  createSwitchNavigator,
-  createAppContainer,
-  createBottomTabNavigator,
-  createStackNavigator
-} from "react-navigation";
+import { Text, View, FlatList, StyleSheet } from "react-native";
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import ListItem from './ListItem'
 import Header from './Header'
@@ -16,7 +10,8 @@ class Lists extends React.Component {
     selectedIndex: 0,
     movieResultTitle: "Popular Movies",
     queryResultData: null,
-    pageSubtitle: 'Popular Movies List'
+    pageSubtitle: 'Popular Movies List',
+    segmentedValues: ["Popular", "Top Rated", "Upcoming"]
   };
   handleContent(item, index) {
     moviePoster = `http://image.tmdb.org/t/p/original`
@@ -66,6 +61,7 @@ class Lists extends React.Component {
       selectedIndex: index,
       pageSubtitle: pageSubtitle
     });
+    console.log(this.state.selectedIndex)
     this.getListResult(index);
   };
   getListResult = async index => {
@@ -135,6 +131,7 @@ class Lists extends React.Component {
             }}
           >
             <View style={{ width: 300 }}>
+            
               <SegmentedControlTab
                 values={["Popular", "Top Rated", "Upcoming"]}
                 selectedIndex={this.state.selectedIndex}
