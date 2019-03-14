@@ -1,0 +1,126 @@
+import React from "react";
+import {
+  Text,
+  View,
+  SegmentedControlIOS,
+  TextInput,
+  SectionList,
+  FlatList,
+  Image
+} from "react-native";
+import {
+  createSwitchNavigator,
+  createAppContainer,
+  createBottomTabNavigator,
+  createStackNavigator
+} from "react-navigation";
+
+class Search extends React.Component {
+  state = {
+    selectedIndex: 0,
+    value: "Movies",
+    searchParameter: "movie",
+    text: null,
+    querySearchData: null,
+    test: ["cachorro", "elefante", "tatu"]
+  };
+
+  getSearchParameter() {
+    var searchParameter;
+    if (this.state.selectedIndex === 0) {
+      searchParameter = "movie";
+    } else if (this.state.selectedIndex === 1) {
+      searchParameter = "person";
+    } else {
+      searchParameter = "tv";
+    }
+    this.setState({
+      searchParameter: searchParameter
+    });
+    console.log("parametro atualizado: " + this.state.searchParameter);
+    console.log("texto do usuario: " + this.state.text);
+  }
+
+  addMoviesList() {
+    this.state.test.map(movie => {
+      console.log("INFORMACAO DO FILME AQUI: "),
+        console.log(movie),
+        <Text>{movie}</Text>;
+    });
+  }
+
+  getSearchResults = async event => {
+    var url = "https://api.themoviedb.org/3/search/";
+    apiKey = "8367b1854dccedcfc9001204de735470";
+
+    this.getSearchParameter();
+
+    urlRequest = `${url}${
+      this.state.searchParameter
+    }?api_key=${apiKey}&language=en-US&query=${this.state.text}`;
+    console.log(urlRequest);
+
+    const apiCall = await fetch(urlRequest);
+    const data = await apiCall.json();
+
+    this.state.querySearchData = data.results;
+
+    //     Updating the state
+    this.setState({
+      state: this.state
+    });
+    console.log(this.test);
+
+    //     console.log(this.state.querySearchData);
+  };
+
+  render() {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View style={{ display: "block", width: "90%" }}>
+          <SegmentedControlIOS
+            values={["Movies", "People", "TV Show"]}
+            selectedIndex={this.state.selectedIndex}
+            onValueChange={value => {
+              console.log(value);
+              this.state.value = value;
+            }}
+            onChange={event => {
+              this.setState({
+                selectedIndex: event.nativeEvent.selectedSegmentIndex
+              });
+            }}
+          />
+          <TextInput
+            style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
+            onChangeText={text => this.setState({ text })}
+            //   value={this.state.text}
+            placeholder="Type your search query here"
+            enablesReturnKeyAutomatically={true}
+            returnKeyType="search"
+            onSubmitEditing={this.getSearchResults}
+          />
+          <Text>{this.state.selectedIndex}</Text>
+        </View>
+        <View style={{ flex: 1, maxHeight: 560 }}>
+          <FlatList
+            data={this.state.querySearchData}
+            renderItem={({ item }) => (
+              <View>
+                {/* <Text>Hello</Text> */}
+                <Text>{item.title}</Text>
+              </View>
+            )}
+            keyExtractor={item => `${item.id}`}
+            // ListHeaderComponent={this.renderHeader}
+          />
+        </View>
+      </View>
+    );
+  }
+}
+
+export default Search;
+{
+  /* <Text>{item.key}</Text> */
+}
